@@ -7,10 +7,10 @@ const alienHeight = 40;
 const alienPadding = 10;
 const alienOffsetTop = 50;
 const alienOffsetLeft = 50;
-let alienSpeed = 1; // Initial alien speed
+let alienSpeed = 1;
 
 let aliens = [];
-let playerX = 275; // Initial player position
+let playerX = 275;
 const playerWidth = 50;
 const playerHeight = 20;
 const playerSpeed = 5;
@@ -23,24 +23,20 @@ const bombWidth = 6;
 const bombHeight = 10;
 let bombs = [];
 
-// Canvas setup
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Info bar elements
 const scoreElement = document.getElementById("score");
 const livesElement = document.getElementById("lives");
 
-// Initialize game
 function init() {
   scoreElement.textContent = `Score: ${score}`;
   livesElement.textContent = `Lives: ${lives}`;
   createAliens();
   gameLoop();
-  setInterval(dropBomb, 1000); // Drop bombs every 1 second
+  setInterval(dropBomb, 1000);
 }
 
-// Create aliens
 function createAliens() {
   for (let row = 0; row < alienRows; row++) {
     aliens[row] = [];
@@ -52,7 +48,6 @@ function createAliens() {
   }
 }
 
-// Draw aliens
 function drawAliens() {
   for (let row = 0; row < alienRows; row++) {
     for (let col = 0; col < aliensPerRow; col++) {
@@ -72,7 +67,6 @@ function drawAliens() {
   }
 }
 
-// Draw player
 function drawPlayer() {
   ctx.beginPath();
   ctx.rect(
@@ -86,17 +80,15 @@ function drawPlayer() {
   ctx.closePath();
 }
 
-// Update bullets
 function updateBullets() {
   for (let i = bullets.length - 1; i >= 0; i--) {
-    bullets[i].y -= 5; // Bullet speed
+    bullets[i].y -= 5;
     if (bullets[i].y < 0) {
       bullets.splice(i, 1);
     }
   }
 }
 
-// Draw bullets
 function drawBullets() {
   for (let i = 0; i < bullets.length; i++) {
     ctx.beginPath();
@@ -107,17 +99,15 @@ function drawBullets() {
   }
 }
 
-// Update bombs
 function updateBombs() {
   for (let i = bombs.length - 1; i >= 0; i--) {
-    bombs[i].y += 3; // Bomb speed
+    bombs[i].y += 3;
     if (bombs[i].y > canvas.height) {
       bombs.splice(i, 1);
     }
   }
 }
 
-// Draw bombs
 function drawBombs() {
   for (let i = 0; i < bombs.length; i++) {
     ctx.beginPath();
@@ -128,7 +118,6 @@ function drawBombs() {
   }
 }
 
-// Drop bombs randomly from aliens
 function dropBomb() {
   let aliveAliens = [];
   for (let row = 0; row < alienRows; row++) {
@@ -149,9 +138,7 @@ function dropBomb() {
   }
 }
 
-// Collision detection
 function collisionDetection() {
-  // Player bullet vs aliens
   for (let i = bullets.length - 1; i >= 0; i--) {
     for (let row = 0; row < alienRows; row++) {
       for (let col = 0; col < aliensPerRow; col++) {
@@ -174,7 +161,6 @@ function collisionDetection() {
     }
   }
 
-  // Alien bomb vs player
   for (let i = bombs.length - 1; i >= 0; i--) {
     if (
       bombs[i].x > playerX &&
@@ -191,7 +177,6 @@ function collisionDetection() {
     }
   }
 
-  // Detect if any aliens have reached the bottom
   for (let row = 0; row < alienRows; row++) {
     for (let col = 0; col < aliensPerRow; col++) {
       if (
@@ -204,13 +189,11 @@ function collisionDetection() {
   }
 }
 
-// Game over function
 function gameOver() {
   alert("Game Over");
   document.location.reload();
 }
 
-// Keyboard event listeners
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
@@ -238,7 +221,6 @@ function keyUpHandler(e) {
   }
 }
 
-// Update player position
 function updatePlayerPosition() {
   if (rightPressed && playerX < canvas.width - playerWidth) {
     playerX += playerSpeed;
@@ -247,7 +229,6 @@ function updatePlayerPosition() {
   }
 }
 
-// Update alien position
 function updateAlienPosition() {
   for (let row = 0; row < alienRows; row++) {
     for (let col = 0; col < aliensPerRow; col++) {
@@ -266,16 +247,15 @@ function updateAlienPosition() {
         alienSpeed = -alienSpeed;
         for (let r = 0; r < alienRows; r++) {
           for (let c = 0; c < aliensPerRow; c++) {
-            aliens[r][c].y += 10; // Move aliens down
+            aliens[r][c].y += 10;
           }
         }
-        break; // Break the inner loop to avoid multiple speed changes
+        break;
       }
     }
   }
 }
 
-// Update game state
 function updateGameState() {
   updatePlayerPosition();
   updateBullets();
@@ -283,7 +263,6 @@ function updateGameState() {
   collisionDetection();
 }
 
-// Main game loop
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawAliens();
@@ -294,6 +273,4 @@ function gameLoop() {
   updateGameState();
   requestAnimationFrame(gameLoop);
 }
-
-// Start the game
 init();
